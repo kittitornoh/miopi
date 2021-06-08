@@ -6,6 +6,7 @@ const app = express();
 
 // constants
 const PORT = process.env.PORT || 3001;
+const API = '/api/v1';
 
 // middleware
 app.use(cors());
@@ -15,6 +16,8 @@ app.use(express.json());
 const db = require('./models');
 
 // routers
+const authRoutes = require('./routes/auth.routes');
+app.use(`${API}/auth`, authRoutes);
 
 // init server
 db.sequelize.sync().then(() => {
