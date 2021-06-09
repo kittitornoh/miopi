@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const app = express();
 
 // constants
-const PORT = process.env.PORT || 3001;
+const PORT = 3001;
 const API = '/api/v1';
 
 // middleware
