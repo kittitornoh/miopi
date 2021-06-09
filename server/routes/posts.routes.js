@@ -15,7 +15,7 @@ const controller = require('../controllers/posts.controller');
 router.get('/', controller.getAllPosts);
 
 // get all posts of a single user
-router.get('/:userId/posts', controller.getMyPosts);
+router.get('/user/:userId', controller.getMyPosts);
 
 // create a new post
 router.post('/', controller.createPost);

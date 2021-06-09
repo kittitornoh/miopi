@@ -29,7 +29,33 @@ exports.getAllPosts = async (req, res) => {
  * @param {*} res
  * @returns
  */
-exports.getMyPosts = async (req, res) => {};
+exports.getMyPosts = async (req, res) => {
+  // database query for user
+  Users.findOne({
+    where: {
+      id: req.params.userId,
+    },
+  })
+    .then((user) => {
+      // check if user exists
+      if (!user) {
+        return res.status(404).send({ message: 'User does not exist.' });
+      }
+
+      // database for posts
+      Posts.findAll({
+        where: {
+          UserId: user.id,
+        },
+        order: [['createdAt', 'DESC']], // sort result
+      })
+        .then((posts) => {
+          res.status(200).send(posts);
+        })
+        .catch((error) => res.status(500).send({ message: error.message }));
+    })
+    .catch((error) => res.status(500).send({ message: error.message }));
+};
 
 /**
  * Create a new post.
@@ -75,8 +101,6 @@ exports.createPost = async (req, res) => {
         .catch((error) => res.status(500).send({ message: error.message }));
     })
     .catch((error) => res.status(500).send({ message: error.message }));
-
-  // database query
 };
 
 /**
@@ -87,7 +111,7 @@ exports.createPost = async (req, res) => {
  * @returns
  */
 exports.deleteMyPost = async (req, res) => {
-  //
+  // database query
   await Posts.destroy({
     where: {
       id: req.params.postId,
