@@ -103,6 +103,7 @@ exports.login = (req, res) => {
       // create cookie
       res.cookie('access-token', token, {
         maxAge: 86400, // 24 hours
+        httpOnly: true,
       });
 
       res.status(200).send({ message: 'Log in successful.' });
