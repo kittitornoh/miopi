@@ -1,15 +1,24 @@
 const { verify } = require('jsonwebtoken');
 const dotenv = require('dotenv').config();
 
+/**
+ * Check for a token and validate it.
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @returns
+ */
 module.exports = (req, res, next) => {
   const accessToken = req.cookies['access-token'];
 
-  // check if cookie exists
+  // check if token exists
   if (!accessToken) {
     return res.status(401).send({ message: 'User not authorized.' });
   }
 
   try {
+    // validate token
     const validToken = verify(accessToken, process.env.JWT_SECRET);
 
     if (validToken) {
@@ -20,6 +29,6 @@ module.exports = (req, res, next) => {
       return res.status(401).send({ message: 'User not authorized.' });
     }
   } catch (error) {
-    return res.status(400).send({ message: error.message });
+    return res.status(500).send({ message: error.message });
   }
 };

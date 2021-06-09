@@ -16,10 +16,9 @@ module.exports = (req, res, next) => {
     },
   }).then((user) => {
     if (user) {
-      res.status(400).send({ message: 'Email is already in use.' });
-      return;
+      return res.status(400).send({ message: 'Email is already in use.' });
     }
     // continue if email does not exist
-    next();
+    return next();
   });
 };

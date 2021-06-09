@@ -1,3 +1,6 @@
+const { verify } = require('jsonwebtoken');
+const dotenv = require('dotenv').config();
+
 // models
 const { Posts, Users } = require('../models');
 
@@ -111,14 +114,51 @@ exports.createPost = async (req, res) => {
  * @returns
  */
 exports.deleteMyPost = async (req, res) => {
-  // database query
-  await Posts.destroy({
+  // decode cookie
+  const decodedToken = verify(
+    req.cookies['access-token'],
+    process.env.JWT_SECRET,
+  );
+
+  // database query for user
+  await Users.findOne({
     where: {
-      id: req.params.postId,
+      id: decodedToken.id,
     },
   })
-    .then(() => {
-      res.status(200).send({ message: 'Post deleted.' });
+    .then((user) => {
+      // check if user exists
+      if (!user) {
+        return res.status(404).send({ message: 'User does not exist.' });
+      }
+
+      // database query for post
+      Posts.findOne({
+        where: {
+          id: req.params.postId,
+        },
+      })
+        .then((post) => {
+          // check if post exists
+          if (!post) {
+            return res.status(404).send({ message: 'Post does not exist.' });
+          }
+
+          // verify that UserId matches Post's UserId
+          if (post.UserId !== user.id) {
+            return res.status(500).send({ message: 'User not authorized.' });
+          }
+
+          // database query to destroy post
+          Posts.destroy({
+            where: { id: post.id },
+          })
+            .then(() =>
+              res.status(200).send({ message: 'Post deleted successfully.' }),
+            )
+            .catch((error) => res.status(500).send({ message: error.message }));
+        })
+        .catch((error) => res.status(500).send({ message: error.message }));
     })
     .catch((error) => res.status(500).send({ message: error.message }));
 };
