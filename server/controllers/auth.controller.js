@@ -10,12 +10,21 @@ const verifyIsEmail = require('../helpers/verifyIsEmail');
 // model
 const { Users } = require('../models');
 
-// register new user
-exports.register = async (req, res) => {
-  // #TODO: check for missing fields
+// constants
+const NUM_REGISTER_FIELDS = 4;
+const NUM_LOGIN_FIELDS = 2;
 
-  // check for empty fields
+/**
+ * Register a new user.
+ *
+ * @param {*} req
+ * @param {*} res
+ * @returns
+ */
+exports.register = async (req, res) => {
+  // check for empty and or missing fields
   if (
+    Object.keys(req.body).length < NUM_REGISTER_FIELDS ||
     !req.body.first_name ||
     !req.body.last_name ||
     !req.body.email ||
@@ -44,12 +53,20 @@ exports.register = async (req, res) => {
   res.status(200).send({ message: 'User registered successfully.' });
 };
 
-// log existing user in
+/**
+ * Log in an existing user and store JWT in a cookie.
+ *
+ * @param {*} req
+ * @param {*} res
+ * @returns
+ */
 exports.login = (req, res) => {
-  // #TODO: check for missing fields
-
-  // check for empty fields
-  if (!req.body.email || !req.body.password) {
+  // check for empty and or missing fields
+  if (
+    Object.keys(req.body).length < NUM_LOGIN_FIELDS ||
+    !req.body.email ||
+    !req.body.password
+  ) {
     return res
       .status(400)
       .send({ message: 'Please provide all required fields.' });

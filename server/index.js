@@ -15,9 +15,13 @@ app.use(express.json());
 // database
 const db = require('./models');
 
-// routers
+// routers ----------------------------------------------------------------
+//auth
 const authRoutes = require('./routes/auth.routes');
 app.use(`${API}/auth`, authRoutes);
+// posts
+const postsRoutes = require('./routes/posts.routes');
+app.use(`${API}/posts`, postsRoutes);
 
 // init server
 db.sequelize.sync().then(() => {

@@ -3,9 +3,6 @@ const express = require('express');
 // router
 const router = express.Router();
 
-// model
-const { User } = require('../models');
-
 // controller
 const controller = require('../controllers/auth.controller');
 
