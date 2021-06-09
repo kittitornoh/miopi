@@ -1,7 +1,5 @@
 const { sign } = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-
-// enable environment variables
 const dotenv = require('dotenv').config();
 
 // helper functions
