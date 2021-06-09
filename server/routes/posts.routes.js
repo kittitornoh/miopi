@@ -7,7 +7,7 @@ const router = express.Router();
 const controller = require('../controllers/posts.controller');
 
 // middleware
-// #TODO: add auth middleware
+const validateToken = require('../middleware/validateToken');
 
 // routes ----------------------------------------------------------------
 
@@ -15,12 +15,12 @@ const controller = require('../controllers/posts.controller');
 router.get('/', controller.getAllPosts);
 
 // get all posts of a single user
-router.get('/user/:userId', controller.getMyPosts);
+router.get('/user/:userId', [validateToken], controller.getMyPosts);
 
 // create a new post
-router.post('/', controller.createPost);
+router.post('/', [validateToken], controller.createPost);
 
 // delete a post
-router.delete('/:postId', controller.deleteMyPost);
+router.delete('/:postId', [validateToken], controller.deleteMyPost);
 
 module.exports = router;

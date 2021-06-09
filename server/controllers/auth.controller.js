@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+const { sign } = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 // enable environment variables
@@ -84,8 +84,9 @@ exports.login = (req, res) => {
     where: { email: req.body.email },
   })
     .then((user) => {
+      // check if user exists
       if (!user) {
-        return res.status(404).send({ message: 'User not found.' });
+        return res.status(404).send({ message: 'User does not exist.' });
       }
 
       // check password hash
@@ -99,7 +100,7 @@ exports.login = (req, res) => {
       }
 
       // create jwt
-      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+      const token = sign({ id: user.id }, process.env.JWT_SECRET);
 
       // create cookie
       res.cookie('access-token', token, {

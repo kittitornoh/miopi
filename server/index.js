@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 // app
 const app = express();
@@ -11,6 +12,7 @@ const API = '/api/v1';
 // middleware
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 // database
 const db = require('./models');
