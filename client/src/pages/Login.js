@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
@@ -19,7 +19,7 @@ import Button from 'react-bootstrap/Button';
 const Login = () => {
   let history = useHistory();
   const [error, setError] = useState(null);
-  const { setAuthState } = useContext(AuthContext);
+  const { authState, setAuthState } = useContext(AuthContext);
 
   const initialValues = {
     email: 'kitodges@email.com',
@@ -55,7 +55,9 @@ const Login = () => {
     }
   };
 
-  return (
+  return authState.isAuth ? (
+    <Redirect to='/' />
+  ) : (
     <Row className='d-flex justify-content-center'>
       <Col sm={12} md={6}>
         <Card className='p-4'>

@@ -41,7 +41,7 @@ const Post = () => {
             <Button
               variant='outline-dark'
               className='mb-4'
-              onClick={() => history.push('/')}
+              onClick={() => history.goBack()}
             >
               Back
             </Button>

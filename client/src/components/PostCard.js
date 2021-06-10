@@ -13,7 +13,10 @@ const PostCard = ({ post }) => {
 
   return (
     <Col sm={12} md={3} className='mb-3'>
-      <Card onClick={() => history.push(`/post/${post.id}`)}>
+      <Card
+        style={{ cursor: 'pointer' }}
+        onClick={() => history.push(`/post/${post.id}`)}
+      >
         <Card.Body>
           <Card.Title>{post.title}</Card.Title>
           <Card.Text>
