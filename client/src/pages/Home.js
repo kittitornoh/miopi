@@ -6,6 +6,7 @@ import * as API from '../api/api';
 
 // components
 import PostCard from '../components/PostCard';
+import Row from 'react-bootstrap/Row';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -17,11 +18,11 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
+    <Row>
       {posts.map((post, key) => {
         return <PostCard post={post} key={key} />;
       })}
-    </div>
+    </Row>
   );
 };
 

@@ -1,11 +1,5 @@
-import { useState, useEffect } from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useHistory,
-} from 'react-router-dom';
+import { useState } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 // pages
 import Home from './pages/Home';
@@ -17,29 +11,34 @@ import Profile from './pages/Profile';
 // context
 import { AuthContext } from './auth/AuthContext';
 
+// components
+import NavBar from './components/NavBar';
+import Container from 'react-bootstrap/Container';
+
 const App = () => {
-  let history = useHistory();
-  const [authState, setAuthState] = useState(false);
+  const [authState, setAuthState] = useState({
+    id: 0,
+    status: false,
+  });
 
   return (
     <>
       <AuthContext.Provider value={{ authState, setAuthState }}>
         <Router>
-          <nav>
-            <div>
-              <p>Register</p>
-            </div>
-          </nav>
-          <Switch>
-            <Route exact path='/' component={Home} />
-            <Route path='/login' component={Login} />
-            <Route path='/register' component={Register} />
-            <Route path='/:postId' component={Post} />
-            <Route path='/profile' component={Profile} />
-            <Route>
-              <div>Not found.</div>
-            </Route>
-          </Switch>
+          <NavBar />
+
+          <Container className='mt-5'>
+            <Switch>
+              <Route exact path='/' component={Home} />
+              <Route path='/login' component={Login} />
+              <Route path='/register' component={Register} />
+              <Route path='/post/:postId' component={Post} />
+              <Route path='/profile' component={Profile} />
+              <Route>
+                <div>Not found.</div>
+              </Route>
+            </Switch>
+          </Container>
         </Router>
       </AuthContext.Provider>
     </>
