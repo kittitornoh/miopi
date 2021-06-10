@@ -18,7 +18,8 @@ import Container from 'react-bootstrap/Container';
 const App = () => {
   const [authState, setAuthState] = useState({
     id: 0,
-    status: false,
+    name: '',
+    isAuth: false,
   });
 
   return (
@@ -27,7 +28,7 @@ const App = () => {
         <Router>
           <NavBar />
 
-          <Container className='mt-5'>
+          <Container style={{ marginTop: 80 }}>
             <Switch>
               <Route exact path='/' component={Home} />
               <Route path='/login' component={Login} />

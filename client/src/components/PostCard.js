@@ -1,8 +1,5 @@
 import { useHistory } from 'react-router-dom';
-import { format, formatDistanceToNow } from 'date-fns';
-
-// api
-import * as API from '../api/api';
+import { formatDistanceToNow } from 'date-fns';
 
 // components
 import Card from 'react-bootstrap/Card';

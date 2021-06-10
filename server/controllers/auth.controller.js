@@ -106,7 +106,9 @@ exports.login = (req, res) => {
         httpOnly: true,
       });
 
-      res.status(200).send({ message: 'Log in successful.' });
+      res
+        .status(200)
+        .send({ id: user.id, name: `${user.first_name} ${user.last_name}` });
     })
     .catch((error) => res.status(500).send({ message: error.message }));
 };

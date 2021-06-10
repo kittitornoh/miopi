@@ -26,6 +26,29 @@ exports.getAllPosts = async (req, res) => {
 };
 
 /**
+ * Get single post.
+ *
+ * @param {*} req
+ * @param {*} res
+ * @returns
+ */
+exports.getPost = async (req, res) => {
+  // database query
+  await Posts.findOne({
+    where: {
+      id: req.params.postId,
+    },
+  })
+    .then((post) => {
+      if (!post) {
+        res.status(404).send({ message: 'Post does not exist.' });
+      }
+      res.status(200).send(post);
+    })
+    .catch((error) => res.status(500).send({ message: error.message }));
+};
+
+/**
  * Get all posts of a single user that is logged in.
  *
  * @param {*} req

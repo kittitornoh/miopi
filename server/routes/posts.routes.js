@@ -14,6 +14,9 @@ const validateToken = require('../middleware/validateToken');
 // get all posts
 router.get('/', controller.getAllPosts);
 
+// get single post
+router.get('/:postId', controller.getPost);
+
 // get all posts of a single user
 router.get('/user/:userId', [validateToken], controller.getMyPosts);
 
