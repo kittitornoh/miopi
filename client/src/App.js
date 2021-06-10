@@ -1,10 +1,5 @@
-import { useState, useEffect, createElement } from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
 
 // api
@@ -23,10 +18,13 @@ import NotFound from './pages/NotFound';
 import { AuthContext } from './auth/AuthContext';
 
 // components
+import Loading from './components/Loading';
+import ProtectedRoute from './components/ProtectedRoute';
 import NavBar from './components/NavBar';
 import Container from 'react-bootstrap/Container';
 
 const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [authState, setAuthState] = useState({
     id: '',
     name: '',
@@ -37,6 +35,7 @@ const App = () => {
    * Validate token.
    */
   const validateToken = async () => {
+    setIsLoading(true);
     try {
       await axios
         .get(API.AUTH, {
@@ -48,9 +47,11 @@ const App = () => {
             name: `${response.data.first_name} ${response.data.last_name}`,
             isAuth: true,
           });
+          setIsLoading(false);
         });
     } catch (error) {
       console.log(error.response.data);
+      setIsLoading(false);
     }
   };
 
@@ -69,35 +70,34 @@ const App = () => {
           <NavBar />
 
           <Container style={{ marginTop: 80 }}>
-            <Switch>
-              <Route exact path='/' component={Home} />
-              <Route exact path='/login' component={Login} />
-              <Route exact path='/register' component={Register} />
-              <Route exact path='/post/:postId' component={Post} />
-              <PrivateRoute exact path='/profile' component={Profile} />
-              <PrivateRoute exact path='/newPost' component={NewPost} />
-              <Route component={NotFound} />
-            </Switch>
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <Switch>
+                <Route exact path='/' component={Home} />
+                <Route exact path='/login' component={Login} />
+                <Route exact path='/register' component={Register} />
+                <Route exact path='/post/:postId' component={Post} />
+                <ProtectedRoute
+                  exact
+                  path='/profile'
+                  isAuth={authState.isAuth}
+                  component={Profile}
+                />
+                <ProtectedRoute
+                  exact
+                  path='/newPost'
+                  isAuth={authState.isAuth}
+                  component={NewPost}
+                />
+                <Route component={NotFound} />
+              </Switch>
+            )}
           </Container>
         </Router>
       </AuthContext.Provider>
     </>
   );
-
-  function PrivateRoute({ component, ...rest }) {
-    return (
-      <Route
-        {...rest}
-        render={(props) => {
-          return authState.isAuth ? (
-            createElement(component, props)
-          ) : (
-            <Redirect to='/' />
-          );
-        }}
-      />
-    );
-  }
 };
 
 export default App;
