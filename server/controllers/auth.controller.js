@@ -28,27 +28,25 @@ exports.register = async (req, res) => {
     !req.body.email ||
     !req.body.password
   ) {
-    return res
-      .status(400)
-      .send({ message: 'Please provide all required fields.' });
+    res.status(400).send({ message: 'Please provide all required fields.' });
+  } else {
+    // check for valid email address
+    if (!verifyIsEmail(req.body.email)) {
+      res
+        .status(400)
+        .send({ message: 'Please provide a valid email address.' });
+    } else {
+      // database query
+      await Users.create({
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        password: bcrypt.hashSync(req.body.password, 10), // hash password
+      }).catch((error) => res.status(500).send({ message: error.message }));
+
+      res.status(200).send({ message: 'User registered successfully.' });
+    }
   }
-
-  // check for valid email address
-  if (!verifyIsEmail(req.body.email)) {
-    return res
-      .status(400)
-      .send({ message: 'Please provide a valid email address.' });
-  }
-
-  // database query
-  await Users.create({
-    first_name: req.body.first_name,
-    last_name: req.body.last_name,
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 10), // hash password
-  }).catch((error) => res.status(500).send({ message: error.message }));
-
-  res.status(200).send({ message: 'User registered successfully.' });
 };
 
 /**
@@ -58,57 +56,56 @@ exports.register = async (req, res) => {
  * @param {*} res
  * @returns
  */
-exports.login = (req, res) => {
+exports.login = async (req, res) => {
   // check for empty and or missing fields
   if (
     Object.keys(req.body).length < NUM_LOGIN_FIELDS ||
     !req.body.email ||
     !req.body.password
   ) {
-    return res
-      .status(400)
-      .send({ message: 'Please provide all required fields.' });
-  }
-
-  // check for valid email address
-  if (!verifyIsEmail(req.body.email)) {
-    return res
-      .status(400)
-      .send({ message: 'Please provide a valid email address.' });
-  }
-
-  // database query
-  Users.findOne({
-    where: { email: req.body.email },
-  })
-    .then((user) => {
-      // check if user exists
-      if (!user) {
-        return res.status(404).send({ message: 'User does not exist.' });
-      }
-
-      // check password hash
-      const passwordIsValid = bcrypt.compareSync(
-        req.body.password,
-        user.password,
-      );
-
-      if (!passwordIsValid) {
-        return res.status(401).send({ message: 'Invalid password.' });
-      }
-
-      // create jwt
-      const token = sign({ id: user.id }, process.env.JWT_SECRET);
-
-      // create cookie
-      res.cookie('access-token', token, {
-        maxAge: 86400, // 24 hours
-        httpOnly: true,
-      });
-
+    res.status(400).send({ message: 'Please provide all required fields.' });
+  } else {
+    // check for valid email address
+    if (!verifyIsEmail(req.body.email)) {
       res
-        .status(200)
-        .send({ id: user.id, name: `${user.first_name} ${user.last_name}` });
-    })
-    .catch((error) => res.status(500).send({ message: error.message }));
+        .status(400)
+        .send({ message: 'Please provide a valid email address.' });
+    } else {
+      // database query
+      await Users.findOne({
+        where: { email: req.body.email },
+      })
+        .then((user) => {
+          // check if user exists
+          if (!user) {
+            res.status(404).send({ message: 'User not found.' });
+          } else {
+            // check password hash
+            const passwordIsValid = bcrypt.compareSync(
+              req.body.password,
+              user.password,
+            );
+
+            if (!passwordIsValid) {
+              res.status(401).send({ message: 'Invalid password.' });
+            } else {
+              // create jwt
+              const token = sign({ id: user.id }, process.env.JWT_SECRET);
+
+              // create cookie
+              res.cookie('access-token', token, {
+                maxAge: 86400, // 24 hours
+                httpOnly: true,
+              });
+
+              res.status(200).send({
+                id: user.id,
+                name: `${user.first_name} ${user.last_name}`,
+              });
+            }
+          }
+        })
+        .catch((error) => res.status(500).send({ message: error.message }));
+    }
+  }
 };

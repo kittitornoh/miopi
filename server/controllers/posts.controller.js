@@ -41,9 +41,10 @@ exports.getPost = async (req, res) => {
   })
     .then((post) => {
       if (!post) {
-        res.status(404).send({ message: 'Post does not exist.' });
+        res.status(404).send({ message: 'Post not found.' });
+      } else {
+        res.status(200).send(post);
       }
-      res.status(200).send(post);
     })
     .catch((error) => res.status(500).send({ message: error.message }));
 };
@@ -57,7 +58,7 @@ exports.getPost = async (req, res) => {
  */
 exports.getMyPosts = async (req, res) => {
   // database query for user
-  Users.findOne({
+  await Users.findOne({
     where: {
       id: req.params.userId,
     },
@@ -65,20 +66,20 @@ exports.getMyPosts = async (req, res) => {
     .then((user) => {
       // check if user exists
       if (!user) {
-        return res.status(404).send({ message: 'User does not exist.' });
-      }
-
-      // database for posts
-      Posts.findAll({
-        where: {
-          UserId: user.id,
-        },
-        order: [['createdAt', 'DESC']], // sort result
-      })
-        .then((posts) => {
-          res.status(200).send(posts);
+        res.status(404).send({ message: 'User not found.' });
+      } else {
+        // database for posts
+        Posts.findAll({
+          where: {
+            UserId: user.id,
+          },
+          order: [['createdAt', 'DESC']], // sort result
         })
-        .catch((error) => res.status(500).send({ message: error.message }));
+          .then((posts) => {
+            res.status(200).send(posts);
+          })
+          .catch((error) => res.status(500).send({ message: error.message }));
+      }
     })
     .catch((error) => res.status(500).send({ message: error.message }));
 };
@@ -98,35 +99,33 @@ exports.createPost = async (req, res) => {
     !req.body.body ||
     !req.body.userId
   ) {
-    return res
-      .status(400)
-      .send({ message: 'Please provide all required fields.' });
-  }
-
-  // database query for user
-  await Users.findOne({
-    where: {
-      id: req.body.userId,
-    },
-  })
-    .then((user) => {
-      // check if user exists
-      if (!user) {
-        return res.status(404).send({ message: 'User does not exist.' });
-      }
-
-      // database query for posts
-      Posts.create({
-        title: req.body.title,
-        body: req.body.body,
-        UserId: user.id,
-      })
-        .then(() =>
-          res.status(200).send({ message: 'Post successfully created.' }),
-        )
-        .catch((error) => res.status(500).send({ message: error.message }));
+    res.status(400).send({ message: 'Please provide all required fields.' });
+  } else {
+    // database query for user
+    await Users.findOne({
+      where: {
+        id: req.body.userId,
+      },
     })
-    .catch((error) => res.status(500).send({ message: error.message }));
+      .then((user) => {
+        // check if user exists
+        if (!user) {
+          res.status(404).send({ message: 'User not found.' });
+        } else {
+          // database query for posts
+          Posts.create({
+            title: req.body.title,
+            body: req.body.body,
+            UserId: user.id,
+          })
+            .then(() =>
+              res.status(200).send({ message: 'Post successfully created.' }),
+            )
+            .catch((error) => res.status(500).send({ message: error.message }));
+        }
+      })
+      .catch((error) => res.status(500).send({ message: error.message }));
+  }
 };
 
 /**

@@ -9,13 +9,16 @@ import { AuthContext } from '../auth/AuthContext';
 import * as API from '../api/api';
 
 // components
+import ErrorText from '../components/ErrorText';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 const Login = () => {
   let history = useHistory();
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
   const { setAuthState } = useContext(AuthContext);
 
   const initialValues = {
@@ -31,74 +34,70 @@ const Login = () => {
     password: yup.string().required('Password is required.'),
   });
 
-  const handleLogin = (data) => {
-    const user = { email: data.email, password: data.password };
-
-    axios.post(API.LOGIN, user).then((response) => {
-      if (response.data.error) {
-        console.log(response.data);
-      } else {
-        setAuthState({
-          id: response.data.id,
-          name: response.data.name,
-          isAuth: true,
-        });
-
-        history.push('/');
-      }
-    });
+  const handleLogin = async (data) => {
+    try {
+      await axios.post(API.LOGIN, data).then((response) => {
+        console.log(response);
+      });
+    } catch (error) {
+      setError(error.response.data);
+    }
   };
 
   return (
-    <Card className='w-50 p-5 mx-auto'>
-      <Card.Title>Login</Card.Title>
-      <Card.Body className='p-0 mt-3'>
-        {error && <span>{error}</span>}
-        <Formik
-          validationSchema={validationSchema}
-          onSubmit={handleLogin}
-          initialValues={initialValues}
-        >
-          {({ handleSubmit, handleChange, values, errors }) => (
-            <Form noValidate onSubmit={handleSubmit}>
-              <Form.Group controlId='loginEmail'>
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type='email'
-                  placeholder='Email'
-                  name='email'
-                  value={values.email}
-                  onChange={handleChange}
-                  isInvalid={!!errors.email}
-                />
-                <Form.Control.Feedback type='invalid'>
-                  {errors.email}
-                </Form.Control.Feedback>
-              </Form.Group>
+    <Row className='d-flex justify-content-center'>
+      <Col sm={12} md={6}>
+        <Card className='p-4'>
+          <Card.Title>Login</Card.Title>
+          <Card.Body className='p-0 mt-3'>
+            {error && <ErrorText>{error.message}</ErrorText>}
+            <Formik
+              validationSchema={validationSchema}
+              onSubmit={handleLogin}
+              initialValues={initialValues}
+            >
+              {({ handleSubmit, handleChange, values, errors }) => (
+                <Form noValidate onSubmit={handleSubmit}>
+                  <Form.Group controlId='loginEmail'>
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
+                      type='email'
+                      placeholder='Email'
+                      name='email'
+                      value={values.email}
+                      onChange={handleChange}
+                      isInvalid={!!errors.email}
+                    />
+                    <Form.Control.Feedback type='invalid'>
+                      {errors.email}
+                    </Form.Control.Feedback>
+                  </Form.Group>
 
-              <Form.Group controlId='loginPassword'>
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type='password'
-                  placeholder='Password'
-                  name='password'
-                  value={values.password}
-                  onChange={handleChange}
-                  isInvalid={!!errors.password}
-                />
-                <Form.Control.Feedback type='invalid'>
-                  {errors.password}
-                </Form.Control.Feedback>
-              </Form.Group>
+                  <Form.Group controlId='loginPassword'>
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control
+                      type='password'
+                      placeholder='Password'
+                      name='password'
+                      value={values.password}
+                      onChange={handleChange}
+                      isInvalid={!!errors.password}
+                    />
+                    <Form.Control.Feedback type='invalid'>
+                      {errors.password}
+                    </Form.Control.Feedback>
+                  </Form.Group>
 
-              <Button type='submit' block>
-                Log in
-              </Button>
-            </Form>
-          )}
-        </Formik>
-      </Card.Body>
-    </Card>
+                  <Button type='submit' block>
+                    Log in
+                  </Button>
+                </Form>
+              )}
+            </Formik>
+          </Card.Body>
+        </Card>
+      </Col>
+    </Row>
   );
 };
 
