@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Formik } from 'formik';
-import * as yup from 'yup';
 import axios from 'axios';
 
 // api
 import * as API from '../api/api';
+
+// schema
+import { userRegistrationValidationSchema } from '../validations/schemas/userRegistrationSchema';
 
 // components
 import ErrorText from '../components/ErrorText';
@@ -25,16 +27,6 @@ const Register = () => {
     email: '',
     password: '',
   };
-
-  const validationSchema = yup.object().shape({
-    first_name: yup.string().required('First name is required.'),
-    last_name: yup.string().required('Last name is required.'),
-    email: yup
-      .string()
-      .email('Please enter a valid email address.')
-      .required('Email is required.'),
-    password: yup.string().required('Password is required.'),
-  });
 
   /**
    * Register with the given credentials.
@@ -60,7 +52,7 @@ const Register = () => {
           <Card.Body className='p-0 mt-3'>
             {error && <ErrorText>{error.message}</ErrorText>}
             <Formik
-              validationSchema={validationSchema}
+              validationSchema={userRegistrationValidationSchema}
               onSubmit={handleLogin}
               initialValues={initialValues}
             >

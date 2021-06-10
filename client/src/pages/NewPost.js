@@ -1,11 +1,13 @@
 import { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Formik } from 'formik';
-import * as yup from 'yup';
 import axios from 'axios';
 
 // api
 import * as API from '../api/api';
+
+// schema
+import { newPostValidationSchema } from '../validations/schemas/newPostSchema';
 
 // context
 import { AuthContext } from '../auth/AuthContext';
@@ -27,11 +29,6 @@ const NewPost = () => {
     title: '',
     body: '',
   };
-
-  const validationSchema = yup.object().shape({
-    title: yup.string().required('Title is required.'),
-    body: yup.string().required('Body is required.'),
-  });
 
   /**
    * Post a new post then redirect to the home page.
@@ -66,7 +63,7 @@ const NewPost = () => {
           <Card.Body className='p-0 mt-3'>
             {error && <ErrorText>{error.message}</ErrorText>}
             <Formik
-              validationSchema={validationSchema}
+              validationSchema={newPostValidationSchema}
               onSubmit={handlePost}
               initialValues={initialValues}
             >

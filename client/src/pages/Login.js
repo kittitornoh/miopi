@@ -1,12 +1,14 @@
 import { useState, useContext } from 'react';
 import { useHistory, Redirect } from 'react-router-dom';
 import { Formik } from 'formik';
-import * as yup from 'yup';
 import axios from 'axios';
 import { AuthContext } from '../auth/AuthContext';
 
 // api
 import * as API from '../api/api';
+
+// schema
+import { userLoginValidationSchema } from '../validations/schemas/userLoginSchema';
 
 // components
 import ErrorText from '../components/ErrorText';
@@ -25,14 +27,6 @@ const Login = () => {
     email: '',
     password: '',
   };
-
-  const validationSchema = yup.object().shape({
-    email: yup
-      .string()
-      .email('Please enter a valid email address.')
-      .required('Email is required.'),
-    password: yup.string().required('Password is required.'),
-  });
 
   /**
    * Log in user with the given credentials.
@@ -70,7 +64,7 @@ const Login = () => {
           <Card.Body className='p-0 mt-3'>
             {error && <ErrorText>{error.message}</ErrorText>}
             <Formik
-              validationSchema={validationSchema}
+              validationSchema={userLoginValidationSchema}
               onSubmit={handleLogin}
               initialValues={initialValues}
             >
