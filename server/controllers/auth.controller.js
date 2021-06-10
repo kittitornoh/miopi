@@ -13,6 +13,16 @@ const NUM_REGISTER_FIELDS = 4;
 const NUM_LOGIN_FIELDS = 2;
 
 /**
+ * Check if current user is authenticated.
+ *
+ * @param {*} req
+ * @param {*} res
+ */
+exports.auth = async (req, res) => {
+  res.status(200).send({ auth: true });
+};
+
+/**
  * Register a new user.
  *
  * @param {*} req

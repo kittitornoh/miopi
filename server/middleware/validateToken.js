@@ -14,21 +14,19 @@ module.exports = (req, res, next) => {
 
   // check if token exists
   if (!accessToken) {
-    return res.status(401).send({ message: 'User not authorized.' });
-  }
+    res.status(401).send({ message: 'User not authorized.' });
+  } else {
+    try {
+      // validate token
+      const validToken = verify(accessToken, process.env.JWT_SECRET);
 
-  try {
-    // validate token
-    const validToken = verify(accessToken, process.env.JWT_SECRET);
-
-    if (validToken) {
-      req.authenticated = true;
-      return next();
-    } else {
-      req.authenticated = false;
-      return res.status(401).send({ message: 'User not authorized.' });
+      if (validToken) {
+        next();
+      } else {
+        res.status(401).send({ message: 'User not authorized.' });
+      }
+    } catch (error) {
+      res.status(500).send({ message: error.message });
     }
-  } catch (error) {
-    return res.status(500).send({ message: error.message });
   }
 };
