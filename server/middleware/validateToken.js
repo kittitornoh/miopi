@@ -22,6 +22,7 @@ module.exports = (req, res, next) => {
       req.user = validToken;
 
       if (validToken) {
+        // continue if token is valid
         next();
       } else {
         res.status(401).send({ message: 'User not authorized.' });

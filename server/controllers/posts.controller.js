@@ -50,7 +50,7 @@ exports.getPost = async (req, res) => {
 };
 
 /**
- * Get all posts of a single user that is logged in.
+ * Get all posts of a single user that is logged in, sorted by the date they were created.
  *
  * @param {*} req
  * @param {*} res

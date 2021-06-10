@@ -60,6 +60,8 @@ const App = () => {
     if (localStorage.getItem('access-token')) {
       // validate token if it exists
       validateToken();
+    } else {
+      setIsLoading(false);
     }
   }, []);
 

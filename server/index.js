@@ -22,9 +22,6 @@ app.use(`${API}/auth`, authRoutes);
 // posts
 const postsRoutes = require('./routes/posts.routes');
 app.use(`${API}/posts`, postsRoutes);
-// users
-const usersRoutes = require('./routes/users.routes');
-app.use(`${API}/users`, usersRoutes);
 
 // init server
 db.sequelize.sync().then(() => {

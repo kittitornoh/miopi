@@ -1,6 +1,6 @@
 const { sign } = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const dotenv = require('dotenv').config();
+require('dotenv').config();
 
 // helper functions
 const verifyIsEmail = require('../helpers/verifyIsEmail');
@@ -60,7 +60,7 @@ exports.register = async (req, res) => {
 };
 
 /**
- * Log in an existing user and store JWT in a cookie.
+ * Log in an existing user and return JWT.
  *
  * @param {*} req
  * @param {*} res

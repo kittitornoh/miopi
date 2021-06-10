@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "first_name": "Darill",
+    "last_name": "Bendik",
+    "email": "dbendik0@a8.net",
+    "password": "password"
+  },
+  {
+    "id": 2,
+    "first_name": "Ellerey",
+    "last_name": "Tancock",
+    "email": "etancock1@pagesperso-orange.fr",
+    "password": "password"
+  },
+  {
+    "id": 3,
+    "first_name": "Cyndy",
+    "last_name": "McFaell",
+    "email": "cmcfaell2@msu.edu",
+    "password": "password"
+  },
+  {
+    "id": 4,
+    "first_name": "Dara",
+    "last_name": "Hinksen",
+    "email": "dhinksen3@disqus.com",
+    "password": "password"
+  },
+  {
+    "id": 5,
+    "first_name": "Catrina",
+    "last_name": "Peetermann",
+    "email": "cpeetermann4@cmu.edu",
+    "password": "password"
+  },
+  {
+    "id": 6,
+    "first_name": "Hurleigh",
+    "last_name": "Kliment",
+    "email": "hkliment5@vkontakte.ru",
+    "password": "password"
+  },
+  {
+    "id": 7,
+    "first_name": "Kort",
+    "last_name": "Rumney",
+    "email": "krumney6@answers.com",
+    "password": "password"
+  },
+  {
+    "id": 8,
+    "first_name": "Katey",
+    "last_name": "Grzeszczak",
+    "email": "kgrzeszczak7@youtube.com",
+    "password": "password"
+  },
+  {
+    "id": 9,
+    "first_name": "Arabel",
+    "last_name": "Dorgan",
+    "email": "adorgan8@squidoo.com",
+    "password": "password"
+  },
+  {
+    "id": 10,
+    "first_name": "Randal",
+    "last_name": "Domek",
+    "email": "rdomek9@shareasale.com",
+    "password": "password"
+  },
+  {
+    "id": 11,
+    "first_name": "Dev",
+    "last_name": "Tumbridge",
+    "email": "dtumbridgea@tmall.com",
+    "password": "password"
+  },
+  {
+    "id": 12,
+    "first_name": "Kimmy",
+    "last_name": "Searle",
+    "email": "ksearleb@webnode.com",
+    "password": "password"
+  },
+  {
+    "id": 13,
+    "first_name": "Gerrie",
+    "last_name": "Razoux",
+    "email": "grazouxc@storify.com",
+    "password": "password"
+  },
+  {
+    "id": 14,
+    "first_name": "Mandie",
+    "last_name": "Miller",
+    "email": "mmillerd@gnu.org",
+    "password": "password"
+  },
+  {
+    "id": 15,
+    "first_name": "Ardene",
+    "last_name": "Foucher",
+    "email": "afouchere@mapy.cz",
+    "password": "password"
+  },
+  {
+    "id": 16,
+    "first_name": "Brianna",
+    "last_name": "Dawidowitz",
+    "email": "bdawidowitzf@addthis.com",
+    "password": "password"
+  },
+  {
+    "id": 17,
+    "first_name": "Maison",
+    "last_name": "Pantone",
+    "email": "mpantoneg@g.co",
+    "password": "password"
+  },
+  {
+    "id": 18,
+    "first_name": "Corliss",
+    "last_name": "Charrett",
+    "email": "ccharretth@sourceforge.net",
+    "password": "password"
+  },
+  {
+    "id": 19,
+    "first_name": "Ulysses",
+    "last_name": "Haryngton",
+    "email": "uharyngtoni@bbc.co.uk",
+    "password": "password"
+  },
+  {
+    "id": 20,
+    "first_name": "Bryan",
+    "last_name": "Essberger",
+    "email": "bessbergerj@google.co.uk",
+    "password": "password"
+  }
+]
