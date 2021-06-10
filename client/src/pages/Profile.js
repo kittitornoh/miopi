@@ -19,7 +19,7 @@ const Profile = () => {
   useEffect(() => {
     setIsLoading(true);
     axios
-      .get(`http://localhost:3001/api/v1/posts/user/2`, {
+      .get(`${API.POSTS}/user/${authState.id}`, {
         headers: { 'access-token': localStorage.getItem('access-token') },
       })
       .then((response) => {

@@ -1,5 +1,10 @@
-import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { useState, useEffect, createElement } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
 import axios from 'axios';
 
 // api
@@ -49,8 +54,6 @@ const App = () => {
     if (localStorage.getItem('access-token')) {
       // verify token if it exists
       verifyToken();
-    } else {
-      console.log('no token');
     }
   }, []);
 
@@ -63,10 +66,10 @@ const App = () => {
           <Container style={{ marginTop: 80 }}>
             <Switch>
               <Route exact path='/' component={Home} />
-              <Route path='/login' component={Login} />
-              <Route path='/register' component={Register} />
-              <Route path='/post/:postId' component={Post} />
-              <Route path='/profile' component={Profile} />
+              <Route exact path='/login' component={Login} />
+              <Route exact path='/register' component={Register} />
+              <Route exact path='/post/:postId' component={Post} />
+              <PrivateRoute exact path='/profile' component={Profile} />
               <Route>
                 <div>Not found.</div>
               </Route>
@@ -76,6 +79,21 @@ const App = () => {
       </AuthContext.Provider>
     </>
   );
+
+  function PrivateRoute({ component, ...rest }) {
+    return (
+      <Route
+        {...rest}
+        render={(props) => {
+          return authState.isAuth ? (
+            createElement(component, props)
+          ) : (
+            <Redirect to='/' />
+          );
+        }}
+      />
+    );
+  }
 };
 
 export default App;
