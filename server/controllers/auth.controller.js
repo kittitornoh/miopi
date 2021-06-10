@@ -90,17 +90,13 @@ exports.login = async (req, res) => {
               res.status(401).send({ message: 'Invalid password.' });
             } else {
               // create jwt
-              const token = sign({ id: user.id }, process.env.JWT_SECRET);
-
-              // create cookie
-              res.cookie('access-token', token, {
-                maxAge: 86400, // 24 hours
-                httpOnly: true,
+              const token = sign({ id: user.id }, process.env.JWT_SECRET, {
+                expiresIn: 86400, // 24 hours
               });
 
               res.status(200).send({
-                id: user.id,
-                name: `${user.first_name} ${user.last_name}`,
+                auth: true,
+                token: token,
               });
             }
           }

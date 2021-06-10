@@ -10,7 +10,7 @@ const dotenv = require('dotenv').config();
  * @returns
  */
 module.exports = (req, res, next) => {
-  const accessToken = req.cookies['access-token'];
+  const accessToken = req.headers['access-token'];
 
   // check if token exists
   if (!accessToken) {

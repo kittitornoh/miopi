@@ -1,9 +1,8 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
-import { AuthContext } from '../auth/AuthContext';
 
 // api
 import * as API from '../api/api';
@@ -19,7 +18,6 @@ import Button from 'react-bootstrap/Button';
 const Register = () => {
   let history = useHistory();
   const [error, setError] = useState(null);
-  const { setAuthState } = useContext(AuthContext);
 
   const initialValues = {
     first_name: 'John',

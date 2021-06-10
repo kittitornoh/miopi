@@ -37,7 +37,16 @@ const Login = () => {
   const handleLogin = async (data) => {
     try {
       await axios.post(API.LOGIN, data).then((response) => {
-        console.log(response);
+        setError(null);
+
+        // store jwt in local storage
+        localStorage.setItem('jwt', response.data.token);
+        setAuthState({
+          loggedIn: true,
+        });
+
+        // redirect
+        history.push('/');
       });
     } catch (error) {
       setError(error.response.data);
