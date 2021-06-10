@@ -19,6 +19,7 @@ module.exports = (req, res, next) => {
     try {
       // validate token
       const validToken = verify(accessToken, process.env.JWT_SECRET);
+      req.user = validToken;
 
       if (validToken) {
         next();

@@ -19,7 +19,7 @@ const NUM_LOGIN_FIELDS = 2;
  * @param {*} res
  */
 exports.auth = async (req, res) => {
-  res.status(200).send({ auth: true });
+  res.status(200).send(req.user);
 };
 
 /**
@@ -100,13 +100,23 @@ exports.login = async (req, res) => {
               res.status(401).send({ message: 'Invalid password.' });
             } else {
               // create jwt
-              const token = sign({ id: user.id }, process.env.JWT_SECRET, {
-                expiresIn: 86400, // 24 hours
-              });
+              const token = sign(
+                {
+                  id: user.id,
+                  first_name: user.first_name,
+                  last_name: user.last_name,
+                },
+                process.env.JWT_SECRET,
+                {
+                  expiresIn: 86400, // 24 hours
+                },
+              );
 
               res.status(200).send({
-                auth: true,
                 token: token,
+                id: user.id,
+                first_name: user.first_name,
+                last_name: user.last_name,
               });
             }
           }

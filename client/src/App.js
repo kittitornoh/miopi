@@ -1,5 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import axios from 'axios';
+
+// api
+import * as API from './api/api';
 
 // pages
 import Home from './pages/Home';
@@ -17,10 +21,38 @@ import Container from 'react-bootstrap/Container';
 
 const App = () => {
   const [authState, setAuthState] = useState({
-    id: 0,
+    id: '',
     name: '',
     isAuth: false,
   });
+
+  const verifyToken = async () => {
+    try {
+      await axios
+        .get(API.AUTH, {
+          headers: { 'access-token': localStorage.getItem('access-token') },
+        })
+        .then((response) => {
+          setAuthState({
+            id: response.data.id,
+            name: `${response.data.first_name} ${response.data.last_name}`,
+            isAuth: true,
+          });
+        });
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
+
+  useEffect(() => {
+    // check for token
+    if (localStorage.getItem('access-token')) {
+      // verify token if it exists
+      verifyToken();
+    } else {
+      console.log('no token');
+    }
+  }, []);
 
   return (
     <>

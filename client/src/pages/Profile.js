@@ -14,9 +14,13 @@ const Profile = () => {
   const { authState } = useContext(AuthContext);
 
   useEffect(() => {
-    axios.get(`${API.POSTS}/user/${authState.id}`).then((response) => {
-      setPosts(response.data);
-    });
+    axios
+      .get(`${API.POSTS}/user/${authState.id}`, {
+        headers: { 'access-token': localStorage.getItem('accessToken') },
+      })
+      .then((response) => {
+        setPosts(response.data);
+      });
   }, [authState]);
 
   return (

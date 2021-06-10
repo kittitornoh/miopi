@@ -40,9 +40,11 @@ const Login = () => {
         setError(null);
 
         // store jwt in local storage
-        localStorage.setItem('jwt', response.data.token);
+        localStorage.setItem('access-token', response.data.token);
         setAuthState({
-          loggedIn: true,
+          id: response.data.id,
+          name: `${response.data.first_name} ${response.data.last_name}`,
+          isAuth: true,
         });
 
         // redirect
