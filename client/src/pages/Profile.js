@@ -18,6 +18,7 @@ const Profile = () => {
 
   useEffect(() => {
     setIsLoading(true);
+    // get user's posts
     axios
       .get(`${API.POSTS}/user/${authState.id}`, {
         headers: { 'access-token': localStorage.getItem('access-token') },

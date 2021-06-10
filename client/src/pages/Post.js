@@ -26,6 +26,7 @@ const Post = () => {
   useEffect(() => {
     setIsLoading(true);
 
+    // get post
     axios
       .get(`${API.POSTS}/${postId}`)
       .then((response) => {
@@ -35,6 +36,9 @@ const Post = () => {
       .catch((error) => console.log(error.message));
   }, [postId]);
 
+  /**
+   * Delete a post.
+   */
   const handleDelete = async () => {
     try {
       axios
@@ -56,13 +60,16 @@ const Post = () => {
           <Button variant='outline-dark' onClick={() => history.goBack()}>
             Back
           </Button>
-          {authState.isAuth && post.UserId === authState.id ? (
-            <Button variant='outline-danger' onClick={handleDelete}>
-              Delete
-            </Button>
-          ) : (
-            ''
-          )}
+          {
+            // give option to delete if post belongs to logged in user
+            authState.isAuth && post.UserId === authState.id ? (
+              <Button variant='outline-danger' onClick={handleDelete}>
+                Delete
+              </Button>
+            ) : (
+              ''
+            )
+          }
         </Col>
       </Row>
       <Row className='mb-5'>

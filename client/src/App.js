@@ -17,6 +17,7 @@ import Register from './pages/Register';
 import Post from './pages/Post';
 import Profile from './pages/Profile';
 import NewPost from './pages/NewPost';
+import NotFound from './pages/NotFound';
 
 // context
 import { AuthContext } from './auth/AuthContext';
@@ -75,9 +76,7 @@ const App = () => {
               <Route exact path='/post/:postId' component={Post} />
               <PrivateRoute exact path='/profile' component={Profile} />
               <PrivateRoute exact path='/newPost' component={NewPost} />
-              <Route>
-                <div>Not found.</div>
-              </Route>
+              <Route component={NotFound} />
             </Switch>
           </Container>
         </Router>

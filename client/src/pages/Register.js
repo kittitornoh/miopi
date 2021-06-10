@@ -37,9 +37,9 @@ const Register = () => {
   });
 
   /**
-   * Log in with the given credentials.
+   * Register with the given credentials.
    *
-   * @param {*} data    Object containing email and password.
+   * @param {*} data    Object containing first name, last name, email, and password.
    */
   const handleLogin = async (data) => {
     try {

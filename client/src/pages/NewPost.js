@@ -33,7 +33,13 @@ const NewPost = () => {
     body: yup.string().required('Body is required.'),
   });
 
+  /**
+   * Post a new post then redirect to the home page.
+   *
+   * @param {*} data    Object containing the post data.
+   */
   const handlePost = async (data) => {
+    // add UserId
     const newPost = { ...data, userId: authState.id };
 
     try {
@@ -47,8 +53,6 @@ const NewPost = () => {
           // redirect
           history.push('/');
         });
-
-      console.log('posted');
     } catch (error) {
       setError(error.response.data);
     }

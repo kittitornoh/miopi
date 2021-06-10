@@ -34,6 +34,11 @@ const Login = () => {
     password: yup.string().required('Password is required.'),
   });
 
+  /**
+   * Log in user with the given credentials.
+   *
+   * @param {*} data    Object containing email and password.
+   */
   const handleLogin = async (data) => {
     try {
       await axios.post(API.LOGIN, data).then((response) => {
