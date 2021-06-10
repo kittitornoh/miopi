@@ -1,10 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { formatDistanceToNow } from 'date-fns';
 
 // api
 import * as API from '../api/api';
+
+// context
+import { AuthContext } from '../auth/AuthContext';
 
 // components
 import Loading from '../components/Loading';
@@ -18,6 +21,7 @@ const Post = () => {
   let { postId } = useParams();
   const [post, setPost] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const { authState } = useContext(AuthContext);
 
   useEffect(() => {
     setIsLoading(true);
@@ -31,37 +35,58 @@ const Post = () => {
       .catch((error) => console.log(error.message));
   }, [postId]);
 
+  const handleDelete = async () => {
+    try {
+      axios
+        .delete(`${API.POSTS}/${postId}`, {
+          headers: { 'access-token': localStorage.getItem('access-token') },
+        })
+        .then((response) => {
+          history.goBack();
+        });
+    } catch (error) {
+      console.log(error.response.message);
+    }
+  };
+
   return (
-    <Row className='mb-5'>
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <>
-          <Col sm={12}>
-            <Button
-              variant='outline-dark'
-              className='mb-4'
-              onClick={() => history.goBack()}
-            >
-              Back
+    <>
+      <Row className='mb-3'>
+        <Col sm={12} className='d-flex justify-content-between'>
+          <Button variant='outline-dark' onClick={() => history.goBack()}>
+            Back
+          </Button>
+          {authState.isAuth && post.UserId === authState.id ? (
+            <Button variant='outline-danger' onClick={handleDelete}>
+              Delete
             </Button>
-          </Col>
-          <Col sm={12}>
-            <Card>
-              <Card.Body>
-                <Card.Title>{post.title}</Card.Title>
-                <Card.Text>{post.body}</Card.Text>
-              </Card.Body>
-              <Card.Footer>
-                <small className='text-muted'>
-                  {`${formatDistanceToNow(new Date(post.createdAt))} ago`}
-                </small>
-              </Card.Footer>
-            </Card>
-          </Col>
-        </>
-      )}
-    </Row>
+          ) : (
+            ''
+          )}
+        </Col>
+      </Row>
+      <Row className='mb-5'>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <Col sm={12}>
+              <Card>
+                <Card.Body>
+                  <Card.Title>{post.title}</Card.Title>
+                  <Card.Text>{post.body}</Card.Text>
+                </Card.Body>
+                <Card.Footer>
+                  <small className='text-muted'>
+                    {`${formatDistanceToNow(new Date(post.createdAt))} ago`}
+                  </small>
+                </Card.Footer>
+              </Card>
+            </Col>
+          </>
+        )}
+      </Row>
+    </>
   );
 };
 

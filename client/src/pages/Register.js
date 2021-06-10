@@ -20,10 +20,10 @@ const Register = () => {
   const [error, setError] = useState(null);
 
   const initialValues = {
-    first_name: 'John',
-    last_name: 'Doe',
-    email: 'kitodges@email.com',
-    password: 'password',
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: '',
   };
 
   const validationSchema = yup.object().shape({
@@ -36,6 +36,11 @@ const Register = () => {
     password: yup.string().required('Password is required.'),
   });
 
+  /**
+   * Log in with the given credentials.
+   *
+   * @param {*} data    Object containing email and password.
+   */
   const handleLogin = async (data) => {
     try {
       await axios.post(API.REGISTER, data).then((response) => {
@@ -59,7 +64,7 @@ const Register = () => {
               onSubmit={handleLogin}
               initialValues={initialValues}
             >
-              {({ handleSubmit, handleChange, values, errors }) => (
+              {({ handleSubmit, handleChange, values, errors, touched }) => (
                 <Form noValidate onSubmit={handleSubmit}>
                   <Form.Group controlId='registerFirstName'>
                     <Form.Label>First name</Form.Label>
@@ -69,7 +74,7 @@ const Register = () => {
                       name='first_name'
                       value={values.first_name}
                       onChange={handleChange}
-                      isInvalid={!!errors.first_name}
+                      isInvalid={!!errors.first_name && touched.first_name}
                     />
                     <Form.Control.Feedback type='invalid'>
                       {errors.first_name}
@@ -84,7 +89,7 @@ const Register = () => {
                       name='last_name'
                       value={values.last_name}
                       onChange={handleChange}
-                      isInvalid={!!errors.last_name}
+                      isInvalid={!!errors.last_name && touched.last_name}
                     />
                     <Form.Control.Feedback type='invalid'>
                       {errors.last_name}
@@ -99,7 +104,7 @@ const Register = () => {
                       name='email'
                       value={values.email}
                       onChange={handleChange}
-                      isInvalid={!!errors.email}
+                      isInvalid={!!errors.email && touched.email}
                     />
                     <Form.Control.Feedback type='invalid'>
                       {errors.email}
@@ -114,7 +119,7 @@ const Register = () => {
                       name='password'
                       value={values.password}
                       onChange={handleChange}
-                      isInvalid={!!errors.password}
+                      isInvalid={!!errors.password && touched.password}
                     />
                     <Form.Control.Feedback type='invalid'>
                       {errors.password}

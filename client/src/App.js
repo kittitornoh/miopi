@@ -16,6 +16,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Post from './pages/Post';
 import Profile from './pages/Profile';
+import NewPost from './pages/NewPost';
 
 // context
 import { AuthContext } from './auth/AuthContext';
@@ -31,7 +32,10 @@ const App = () => {
     isAuth: false,
   });
 
-  const verifyToken = async () => {
+  /**
+   * Validate token.
+   */
+  const validateToken = async () => {
     try {
       await axios
         .get(API.AUTH, {
@@ -52,8 +56,8 @@ const App = () => {
   useEffect(() => {
     // check for token
     if (localStorage.getItem('access-token')) {
-      // verify token if it exists
-      verifyToken();
+      // validate token if it exists
+      validateToken();
     }
   }, []);
 
@@ -70,6 +74,7 @@ const App = () => {
               <Route exact path='/register' component={Register} />
               <Route exact path='/post/:postId' component={Post} />
               <PrivateRoute exact path='/profile' component={Profile} />
+              <PrivateRoute exact path='/newPost' component={NewPost} />
               <Route>
                 <div>Not found.</div>
               </Route>

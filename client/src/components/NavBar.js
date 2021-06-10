@@ -32,14 +32,16 @@ const NavBar = () => {
     <Navbar bg='dark' variant='dark' fixed='top'>
       <Container>
         <Navbar.Brand>
-          <Link to='/'>MioPi</Link>
+          <Link to='/' style={{ color: 'white' }}>
+            MioPi
+          </Link>
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className='justify-content-end'>
           {authState.isAuth ? (
             <>
               <Navbar.Text>
-                Signed in as: <Link to='/profile'>{authState.name}</Link>
+                <Link to='/profile'>{authState.name}</Link>
               </Navbar.Text>
               <Navbar.Text className='pl-4'>
                 <Button variant='outline-light' size='sm' onClick={logout}>

@@ -1,12 +1,14 @@
 import { useState, useContext } from 'react';
-import { useHistory, Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
-import { AuthContext } from '../auth/AuthContext';
 
 // api
 import * as API from '../api/api';
+
+// context
+import { AuthContext } from '../auth/AuthContext';
 
 // components
 import ErrorText from '../components/ErrorText';
@@ -16,93 +18,89 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-const Login = () => {
+const NewPost = () => {
   let history = useHistory();
   const [error, setError] = useState(null);
-  const { authState, setAuthState } = useContext(AuthContext);
+  const { authState } = useContext(AuthContext);
 
   const initialValues = {
-    email: '',
-    password: '',
+    title: '',
+    body: '',
   };
 
   const validationSchema = yup.object().shape({
-    email: yup
-      .string()
-      .email('Please enter a valid email address.')
-      .required('Email is required.'),
-    password: yup.string().required('Password is required.'),
+    title: yup.string().required('Title is required.'),
+    body: yup.string().required('Body is required.'),
   });
 
-  const handleLogin = async (data) => {
-    try {
-      await axios.post(API.LOGIN, data).then((response) => {
-        setError(null);
+  const handlePost = async (data) => {
+    const newPost = { ...data, userId: authState.id };
 
-        // store jwt in local storage
-        localStorage.setItem('access-token', response.data.token);
-        setAuthState({
-          id: response.data.id,
-          name: `${response.data.first_name} ${response.data.last_name}`,
-          isAuth: true,
+    try {
+      await axios
+        .post(API.POSTS, newPost, {
+          headers: { 'access-token': localStorage.getItem('access-token') },
+        })
+        .then((response) => {
+          setError(null);
+
+          // redirect
+          history.push('/');
         });
 
-        // redirect
-        history.push('/');
-      });
+      console.log('posted');
     } catch (error) {
       setError(error.response.data);
     }
   };
 
-  return authState.isAuth ? (
-    <Redirect to='/' />
-  ) : (
+  return (
     <Row className='d-flex justify-content-center'>
       <Col sm={12} md={6}>
         <Card className='p-4'>
-          <Card.Title>Login</Card.Title>
+          <Card.Title>New Post</Card.Title>
           <Card.Body className='p-0 mt-3'>
             {error && <ErrorText>{error.message}</ErrorText>}
             <Formik
               validationSchema={validationSchema}
-              onSubmit={handleLogin}
+              onSubmit={handlePost}
               initialValues={initialValues}
             >
               {({ handleSubmit, handleChange, values, errors, touched }) => (
                 <Form noValidate onSubmit={handleSubmit}>
-                  <Form.Group controlId='loginEmail'>
-                    <Form.Label>Email</Form.Label>
+                  <Form.Group controlId='newPostTitle'>
+                    <Form.Label>Title</Form.Label>
                     <Form.Control
-                      type='email'
-                      placeholder='Email'
-                      name='email'
-                      value={values.email}
+                      type='title'
+                      placeholder='A new title'
+                      name='title'
+                      value={values.title}
                       onChange={handleChange}
-                      isInvalid={!!errors.email && touched.email}
+                      isInvalid={!!errors.title && touched.title}
                     />
                     <Form.Control.Feedback type='invalid'>
-                      {errors.email}
+                      {errors.title}
                     </Form.Control.Feedback>
                   </Form.Group>
 
-                  <Form.Group controlId='loginPassword'>
-                    <Form.Label>Password</Form.Label>
+                  <Form.Group controlId='newPostBody'>
+                    <Form.Label>Body</Form.Label>
                     <Form.Control
-                      type='password'
-                      placeholder='Password'
-                      name='password'
-                      value={values.password}
+                      as='textarea'
+                      rows={4}
+                      placeholder='Some text...'
+                      name='body'
+                      value={values.body}
                       onChange={handleChange}
-                      isInvalid={!!errors.password && touched.password}
+                      isInvalid={!!errors.body && touched.body}
                     />
                     <Form.Control.Feedback type='invalid'>
-                      {errors.password}
+                      {errors.body}
                     </Form.Control.Feedback>
                   </Form.Group>
 
                   <Button type='submit' block>
-                    Log in
+                    Post
                   </Button>
                 </Form>
               )}
@@ -114,4 +112,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default NewPost;

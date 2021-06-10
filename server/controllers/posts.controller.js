@@ -136,53 +136,24 @@ exports.createPost = async (req, res) => {
  * @returns
  */
 exports.deleteMyPost = async (req, res) => {
-  // decode jwt
-  const decodedToken = verify(
-    req.headers['access-token'],
-    process.env.JWT_SECRET,
-  );
-
-  // database query for user
-  await Users.findOne({
+  // database query
+  await Posts.findOne({
     where: {
-      id: decodedToken.id,
+      id: req.params.postId,
     },
   })
-    .then((user) => {
-      // check if user exists
-      if (!user) {
-        res.status(404).send({ message: 'User does not exist.' });
+    .then((post) => {
+      // check if post exists
+      if (!post) {
+        res.status(404).send({ message: 'Post does not exist.' });
       } else {
-        // database query for post
-        Posts.findOne({
-          where: {
-            id: req.params.postId,
-          },
+        // database query to destroy post
+        Posts.destroy({
+          where: { id: post.id },
         })
-          .then((post) => {
-            // check if post exists
-            if (!post) {
-              res.status(404).send({ message: 'Post does not exist.' });
-            } else {
-              // verify that UserId matches Post's UserId
-              if (post.UserId !== user.id) {
-                res.status(500).send({ message: 'User not authorized.' });
-              } else {
-                // database query to destroy post
-                Posts.destroy({
-                  where: { id: post.id },
-                })
-                  .then(() =>
-                    res
-                      .status(200)
-                      .send({ message: 'Post deleted successfully.' }),
-                  )
-                  .catch((error) =>
-                    res.status(500).send({ message: error.message }),
-                  );
-              }
-            }
-          })
+          .then(() =>
+            res.status(200).send({ message: 'Post deleted successfully.' }),
+          )
           .catch((error) => res.status(500).send({ message: error.message }));
       }
     })
