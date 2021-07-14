@@ -1,13 +1,16 @@
-Jr Software Engineer – Programming
-Assignment
-General Description
+# Jr Software Engineer – Programming Assignment
+
+This was a programming assignment given to me during the final interview process for a Junior Software Engineer position. I was given one week to complete the assignment. I used MySQL, Express, React, and Node as my stack.
+
+## General Description
+
 Your goal is to write a web application that allows for registered users to create posts that have a
 title and body, and for everyone to be able to view those posts.
 
 You may use any language and frameworks that are appropriate, but please do not use any fully-
 coded applications. The purpose of this is for us to evaluate your programming aptitude.
 
-Requirements
+## Requirements
 
 1. On the homepage, a guest or authenticated user should be able to see a grid of posts
    made by everyone, sorted by the date they were created with the newest showing first.
@@ -16,91 +19,8 @@ Requirements
    truncated.
    c. On a desktop, the grid should be 4 posts per row.
    d. On mobile, the grid should be 1 post per row.
-   Desktop
-   Post Title
-   This is a
-   shortened
-   version of the
-   post b...
-
-Post Title
-This is a
-shortened
-version of the
-post b...
-
-Post Title
-This is a
-shortened
-version of the
-post b...
-
-Post Title
-This is a
-shortened
-version of the
-post b...
-
-Post Title
-This is a
-shortened
-version of the
-post b...
-
-Post Title
-This is a
-shortened
-version of the
-post b...
-
-Post Title
-This is a
-shortened
-version of the
-post b...
-
-Post Title
-This is a
-shortened
-version of the
-post b...
-
-Post Title
-This is a
-shortened
-version of the
-post b...
-
-Post Title
-This is a
-shortened
-version of the
-post b...
-
-Post Title
-This is a
-shortened
-version of the
-post b...
-
-Post Title
-This is a
-shortened
-version of the
-post b...
-
-Mobile
-Post Title
-This is a shortened version of the post b...
-
-Post Title
-This is a shortened version of the post b...
-
-Post Title
-This is a shortened version of the post b...
-
-e. This is the only page you need to worry about making responsive. For the others, assume
-you are on a desktop.
+   e. This is the only page you need to worry about making responsive. For the others, assume
+   you are on a desktop.
 
 2. On the homepage, a guest who is not signed in should see a link to create an account or
    log in.
